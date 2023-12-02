@@ -15,13 +15,14 @@ type CubeSet struct {
 	Blue  int
 }
 
-func Task1(configuration CubeSet) int {
+func Task1() int {
 	input := helper.OpenFile("02/input.txt")
 	defer input.Close()
 
 	result := 0
-	scanner := bufio.NewScanner(input)
+	configuration := CubeSet{Red: 12, Green: 13, Blue: 14}
 
+	scanner := bufio.NewScanner(input)
 	for scanner.Scan() {
 		gameId, rounds := parseGame(scanner.Text())
 
