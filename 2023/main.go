@@ -5,7 +5,8 @@ import (
 
 	// day01 "github.com/JonasKraska/advent-of-code/2023/01"
 	// day02 "github.com/JonasKraska/advent-of-code/2023/02"
-	day03 "github.com/JonasKraska/advent-of-code/2023/03"
+	// day03 "github.com/JonasKraska/advent-of-code/2023/03"
+	day04 "github.com/JonasKraska/advent-of-code/2023/04"
 )
 
 func main() {
@@ -14,7 +15,9 @@ func main() {
 	// result := day02.Task1()
 	// result := day02.Task2()
 	// result := day03.Task1()
-	result := day03.Task2()
+	// result := day03.Task2()
+	// result := day04.Task1()
+	result := day04.Task2()
 
 	fmt.Println("Result:", result)
 }
