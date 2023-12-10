@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func OpenFile(path string) *os.File {
@@ -18,4 +19,18 @@ func OpenFile(path string) *os.File {
 	}
 
 	return file
+}
+
+func ParseNumbers(input string) []int {
+	parts := strings.Split(input, ":")
+	elem := strings.Split(parts[1], " ")
+
+	numbers := make([]int, 0)
+	for _, e := range elem {
+		if n := strings.TrimSpace(e); n != "" {
+			numbers = append(numbers, StringToNumber(n))
+		}
+	}
+
+	return numbers
 }

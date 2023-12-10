@@ -18,7 +18,8 @@ const (
 	LOCATION
 )
 
-var seeds []*seed
+var seedIds []int
+var seedAnalysed map[int]bool
 var recipes [][]*recipe
 
 func Task1() int {
@@ -26,7 +27,8 @@ func Task1() int {
 	defer input.Close()
 
 	section := 0
-	seeds = make([]*seed, 0)
+	seedIds = make([]int, 0)
+	seedAnalysed = make(map[int]bool)
 	recipes = make([][]*recipe, 7)
 
 	scanner := bufio.NewScanner(input)
@@ -40,53 +42,53 @@ func Task1() int {
 
 		if section == 0 {
 			parts := strings.Split(line, ":")
-			ids := strings.Split(strings.TrimSpace(parts[1]), " ")
+			numbers := strings.Split(strings.TrimSpace(parts[1]), " ")
 
-			for _, i := range ids {
-				seeds = append(seeds, newSeed(helper.StringToNumber(i)))
-			}
-		} else {
-			if strings.Contains(line, ":") {
-				recipes[section-1] = make([]*recipe, 0)
-				continue
+			for _, id := range numbers {
+				seedIds = append(seedIds, helper.StringToNumber(id))
 			}
 
-			parts := strings.Split(line, " ")
-			recipes[section-1] = append(recipes[section-1], newRecipe(
-				helper.StringToNumber(parts[0]),
-				helper.StringToNumber(parts[1]),
-				helper.StringToNumber(parts[2]),
-			))
+			continue
 		}
+
+		if strings.Contains(line, ":") {
+			recipes[section-1] = make([]*recipe, 0)
+			continue
+		}
+
+		parts := strings.Split(line, " ")
+		recipes[section-1] = append(recipes[section-1], newRecipe(
+			helper.StringToNumber(parts[0]),
+			helper.StringToNumber(parts[1]),
+			helper.StringToNumber(parts[2]),
+		))
 	}
 
 	lowest := math.MaxInt32
-	for _, s := range seeds {
-		analyseSeed(s)
+	for _, id := range seedIds {
+		if !seedAnalysed[id] {
+			seedAnalysed[id] = true
 
-		if s.data[LOCATION] < lowest {
-			lowest = s.data[LOCATION]
+			location := analyseSeedId(id)
+
+			if location < lowest {
+				lowest = location
+			}
 		}
 	}
 
 	return lowest
 }
 
-func analyseSeed(s *seed) {
-	id := s.seed
+func analyseSeedId(id int) int {
 	for r := range recipes {
-		found := false
 		for _, rec := range recipes[r] {
 			if rec.contains(id) {
 				id = rec.calculate(id)
-				s.data[r] = id
-				found = true
 				break
 			}
 		}
-
-		if !found {
-			s.data[r] = id
-		}
 	}
+
+	return id
 }
